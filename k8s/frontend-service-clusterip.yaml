@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service # Name of the Kubernetes Service for the frontend
+  labels:
+    app: frontend
+spec:
+  selector:
+    app: frontend # Selects pods with the label app: frontend
+  ports:
+    - protocol: TCP
+      port: 80 # Port the service listens on (standard HTTP)
+      targetPort: 80 # Port the Nginx container listens on
+  type: ClusterIP # Changed to ClusterIP, as Ingress will handle external exposure

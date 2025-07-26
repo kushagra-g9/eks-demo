@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1 # One replica for the frontend for testing
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: kushagrag99/three-tier-arch-frontend:latest # Replace with your ECR image URL
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always # Ensure the latest image is pulled

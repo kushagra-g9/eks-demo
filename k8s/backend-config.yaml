@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-env-secret # Name of the secret
+type: Opaque # Standard type for arbitrary user-defined data
+data:
+  # Base64 encoded values for environment variables
+  # You can generate these using:
+  # echo -n 'mongodb://mongodb:27017/three_tier_db' | base64
+  # echo -n '5000' | base64
+  MONGO_URI: bW9uZ29kYjovL21vbmdvZGI6MjcwMTcvdGhyZWVfdGllcl9kYg==
+  PORT: NTAwMA==

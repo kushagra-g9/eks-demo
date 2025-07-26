@@ -1,0 +1,66 @@
+# docker-compose.yml
+# This file defines and runs your multi-container three-tier application locally.
+# To use:
+# 1. Ensure your Dockerfiles for frontend and backend are in their respective directories.
+# 2. Make sure your backend's MongoDB connection string is set to 'mongodb://mongodb:27017/three_tier_db'.
+#    (This is typically done in your backend's code or an environment variable).
+# 3. Make sure your frontend's nginx.conf proxies to 'http://backend:5000/api/'.
+# 4. Run 'docker compose up --build -d' from the directory containing this file.
+
+version: '3.8' # Specify the Docker Compose file format version
+
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest # Use the official MongoDB image from Docker Hub
+    container_name: mongodb_container # Assign a recognizable name to the container
+    ports:
+      - "27017:27017" # Map host port 27017 to container port 27017 (optional, for direct access)
+    volumes:
+      - mongodb_data:/data/db # Persist MongoDB data to a named volume
+    networks:
+      - three-tier-network # Connect to the custom network
+    restart: unless-stopped # Always restart unless explicitly stopped
+
+  # Backend Service (Node.js application)
+  backend:
+    build:
+      context: ./backend # Specify the build context (path to your backend Dockerfile)
+      dockerfile: Dockerfile # Name of the Dockerfile in the context
+    container_name: backend_container # Assign a recognizable name
+    ports:
+      - "5000:5000" # Map host port 5000 to container port 5000
+    environment:
+      # Pass the MongoDB connection URI as an environment variable to the backend.
+      # 'mongodb' here refers to the service name defined in this docker-compose.yml,
+      # which Docker Compose resolves to the IP of the 'mongodb' container.
+      MONGO_URI: mongodb://mongodb:27017/three_tier_db
+      PORT: 5000
+    networks:
+      - three-tier-network # Connect to the custom network
+    depends_on:
+      - mongodb # Ensure MongoDB starts before the backend
+    restart: unless-stopped
+
+  # Frontend Service (React app served by Nginx)
+  frontend:
+    build:
+      context: ./frontend # Specify the build context (path to your frontend Dockerfile)
+      dockerfile: Dockerfile # Name of the Dockerfile in the context
+    container_name: frontend_container # Assign a recognizable name
+    ports:
+      - "80:80" # Map host port 80 to container port 80
+    networks:
+      - three-tier-network # Connect to the custom network
+    depends_on:
+      - backend # Ensure backend starts before the frontend (for API proxying)
+    restart: unless-stopped
+
+# Define custom networks
+networks:
+  three-tier-network:
+    driver: bridge # Use the default bridge driver for local networking
+
+# Define named volumes for data persistence
+volumes:
+  mongodb_data: # This volume will store MongoDB's data

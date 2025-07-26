@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1 # Start with 1 replica; HPA will adjust this
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: kushagrag99/three-tier-arch-backend:latest # Using the image specified in your query
+        ports:
+        - containerPort: 5000
+        envFrom: # Use envFrom to load all key-value pairs from a Secret
+        - secretRef:
+            name: backend-env-secret # Reference the name of the Secret
+        imagePullPolicy: Always # Ensure the latest image is pulled
+        resources: # IMPORTANT: Define resource requests/limits for HPA to work
+          requests:
+            cpu: 100m # Request 100 millicores of CPU
+            memory: 128Mi # Request 128 MiB of memory
+          limits:
+            cpu: 200m # Limit to 200 millicores of CPU
+            memory: 256Mi # Limit to 256 MiB of memory
