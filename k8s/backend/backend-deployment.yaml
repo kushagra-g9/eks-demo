@@ -20,8 +20,8 @@ spec:
         ports:
         - containerPort: 5000
         envFrom: # Use envFrom to load all key-value pairs from a Secret
-        - secretRef:
-            name: backend-env-secret # Reference the name of the Secret
+        - configMapRef:
+            name: backend-config # Reference the name of the Secret
         imagePullPolicy: Always # Ensure the latest image is pulled
         resources: # IMPORTANT: Define resource requests/limits for HPA to work
           requests:

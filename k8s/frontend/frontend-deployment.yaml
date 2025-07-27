@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 1 # One replica for the frontend for testing
+  replicas: 2 # One replica for the frontend for testing
   selector:
     matchLabels:
       app: frontend

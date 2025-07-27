@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mongodb
 spec:
-  replicas: 1 # One replica for MongoDB for testing
+  replicas: 2 # One replica for MongoDB for testing
   selector:
     matchLabels:
       app: mongodb
@@ -24,10 +24,10 @@ spec:
       #    value: admin
       #  - name: MONGO_INITDB_ROOT_PASSWORD
       #    value: password
-        volumeMounts:
-        - name: mongodb-storage # Name of the volume mount
-          mountPath: /data/db # Default data directory for MongoDB
+              volumeMounts:
+       - name: mongodb-storage # Name of the volume mount
+         mountPath: /data/db # Default data directory for MongoDB
       volumes:
       - name: mongodb-storage
         persistentVolumeClaim:
-          claimName: mongodb-pvc
+             claimName: mongodb-pvc

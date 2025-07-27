@@ -8,7 +8,8 @@ spec:
   selector:
     app: backend # Selects pods with the label app: backend
   ports:
-    - protocol: TCP
+    - name: http-metrics
+      protocol: TCP
       port: 5000 # Port the service listens on
       targetPort: 5000 # Port the backend container listens on
   type: ClusterIP # Internal service, accessible only within the cluster
