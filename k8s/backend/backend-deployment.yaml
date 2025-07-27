@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: kushagrag99/three-tier-arch-backend:latest # Using the image specified in your query
+        image: kushagrag99/three-tier-arch-backend:v1 # Using the image specified in your query
         ports:
         - containerPort: 5000
         envFrom: # Use envFrom to load all key-value pairs from a Secret
